@@ -1,0 +1,179 @@
+table Crime
+	lineageTag: 18d428d0-1c27-4027-ba34-4500fb93dae9
+
+	measure 'Total Crime Count' = COUNTROWS(Crime)
+		formatString: 0
+		lineageTag: a8c42c5e-fa12-49b2-aaea-440c9f05b174
+
+	measure 'Total Crime (Unfiltered)' = CALCULATE(CountRows(Crime), ALL(Crime[Local Authority Name]), ALL('Date'), ALL(Crime[Crime type]))
+		formatString: 0
+		lineageTag: 5873acf1-17a9-47f0-b75f-52b78e8818b4
+
+	measure 'Crime Rate (Per 1000)' = DIVIDE([Total Crime Count],SUM('Population'[Population]))*1000
+		lineageTag: 216435ba-0c1b-466f-a718-ef22cf4e97d1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% Total Crime' = DIVIDE([Total Crime Count], [Total Crime (Unfiltered)])
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: c6d55548-a513-4f3d-b256-629fdb0d6703
+
+	measure '12 Month Rolling Average' = ```
+			
+			VAR _EndDate = Max('Date'[Month & Year])
+			VAR _12MonthsAgo = EOMONTH(_EndDate, -12)
+			VAR _StartDate = Date(Year(_12MonthsAgo), month(_12MonthsAgo),1)
+			VAR _Table =
+			    Summarize(
+			        Filter(All('Date'),[Month & Year] >= _StartDate && [Month & Year] <= _EndDate),
+			        'Date'[Month & Year],
+			        "_value",'Crime'[Total Crime Count]) 
+			Return
+			    AverageX(_table,'Crime'[Total Crime Count])
+			```
+		lineageTag: f7640135-d98b-4c5d-869d-0be7d4757531
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Crime ID'
+		dataType: string
+		lineageTag: 9aacfca8-cba6-407e-8858-57268421ee95
+		summarizeBy: none
+		sourceColumn: Crime ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 4d9cf01c-503b-4e92-9d5f-74c8817d5657
+		summarizeBy: none
+		sourceColumn: Month
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Reported by'
+		dataType: string
+		lineageTag: 023d5462-d32f-49c6-8f57-bd0996349665
+		summarizeBy: none
+		sourceColumn: Reported by
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Falls within'
+		dataType: string
+		lineageTag: b3ae2d89-66c3-4ca8-b215-399d955440d0
+		summarizeBy: none
+		sourceColumn: Falls within
+
+		annotation SummarizationSetBy = Automatic
+
+	column Longitude
+		dataType: double
+		lineageTag: 1822ee83-0b31-4346-8548-660eb3510c70
+		dataCategory: Longitude
+		summarizeBy: sum
+		sourceColumn: Longitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Latitude
+		dataType: double
+		lineageTag: 9d407e97-073c-406a-8f50-c985f4499e0d
+		dataCategory: Latitude
+		summarizeBy: sum
+		sourceColumn: Latitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Location
+		dataType: string
+		lineageTag: 811594cb-de09-4416-882b-b0e59bef3acc
+		summarizeBy: none
+		sourceColumn: Location
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'LSOA code'
+		dataType: string
+		lineageTag: b71e73f9-4e40-498c-9301-be66ac3251cc
+		dataCategory: StateOrProvince
+		summarizeBy: none
+		sourceColumn: LSOA code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Crime type'
+		dataType: string
+		lineageTag: f77667fd-7abb-44b6-832f-7cb90b08732e
+		summarizeBy: none
+		sourceColumn: Crime type
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Local Authority Name'
+		dataType: string
+		lineageTag: f7f8d6d5-acf7-4714-8bd6-79370b8b4446
+		dataCategory: City
+		summarizeBy: none
+		sourceColumn: Local Authority Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Population
+		dataType: int64
+		formatString: 0
+		lineageTag: 2f0bf969-31ba-46d8-86a5-d28872e544ff
+		summarizeBy: sum
+		sourceColumn: Population
+
+		annotation SummarizationSetBy = Automatic
+
+	hierarchy 'Local Authority Name Hierarchy'
+		lineageTag: 3a235516-228f-44f6-b42c-fdb6595e6cf2
+
+		level 'Local Authority Name'
+			lineageTag: b36fc725-5ecf-4385-8494-3a529d846a50
+			column: 'Local Authority Name'
+
+		level 'LSOA code'
+			lineageTag: 8f8a3c5a-31d5-4eed-89a2-3488052246ba
+			column: 'LSOA code'
+
+		level Location
+			lineageTag: 8b6824df-0c3b-4829-a683-68102e13b6b6
+			column: Location
+
+	partition Crime = m
+		mode: import
+		source =
+				let
+				    Source = Folder.Files("C:\Users\glpepper\OneDrive - Microsoft\Power BI Boot Camp\Crime Statistics\Extended Data"),
+				    #"Filtered Hidden Files1" = Table.SelectRows(Source, each [Attributes]?[Hidden]? <> true),
+				    #"Invoke Custom Function1" = Table.AddColumn(#"Filtered Hidden Files1", "Transform File", each #"Transform File"([Content])),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Invoke Custom Function1", {"Name", "Source.Name"}),
+				    #"Removed Other Columns1" = Table.SelectColumns(#"Renamed Columns1", {"Source.Name", "Transform File"}),
+				    #"Expanded Table Column1" = Table.ExpandTableColumn(#"Removed Other Columns1", "Transform File", Table.ColumnNames(#"Transform File"(#"Sample File"))),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Expanded Table Column1",{{"Source.Name", type text}, {"Crime ID", type text}, {"Month", type date}, {"Reported by", type text}, {"Falls within", type text}, {"Longitude", type number}, {"Latitude", type number}, {"Location", type text}, {"LSOA code", type text}, {"LSOA name", type text}, {"Crime type", type text}, {"Last outcome category", type text}, {"Context", type any}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Source.Name", "Last outcome category", "Context"}),
+				    #"Replaced Value" = Table.ReplaceValue(#"Removed Columns","","Unknown",Replacer.ReplaceValue,{"Crime ID"}),
+				    #"Split Column by Character Transition" = Table.SplitColumn(#"Replaced Value", "LSOA name", Splitter.SplitTextByCharacterTransition((c) => not List.Contains({"0".."9"}, c), {"0".."9"}), {"LSOA name.1", "LSOA name.2"}),
+				    #"Removed Columns1" = Table.RemoveColumns(#"Split Column by Character Transition",{"LSOA name.2"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Removed Columns1",{{"LSOA name.1", "Local Authority Name"}}),
+				    #"Trimmed Text" = Table.TransformColumns(#"Renamed Columns",{{"Local Authority Name", Text.Trim, type text}}),
+				    #"Merged Queries" = Table.NestedJoin(#"Trimmed Text", {"Local Authority Name"}, Population, {"Local Authority Name"}, "Population", JoinKind.Inner),
+				    #"Expanded Population" = Table.ExpandTableColumn(#"Merged Queries", "Population", {"Population"}, {"Population.1"}),
+				    #"Renamed Columns2" = Table.RenameColumns(#"Expanded Population",{{"Population.1", "Population"}})
+				in
+				    #"Renamed Columns2"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

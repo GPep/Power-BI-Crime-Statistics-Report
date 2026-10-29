@@ -1,0 +1,14 @@
+relationship AutoDetected_768b1bc0-53e3-46d9-84a5-22c48b8afd64
+	crossFilteringBehavior: bothDirections
+	fromColumn: Crime.'Local Authority Name'
+	toColumn: Population.'Local Authority Name'
+
+relationship b46f654b-b28a-4d49-a88b-b77386c517cc
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Date.Date
+	toColumn: LocalDateTable_9892fabb-bf65-4330-934b-606051bebacd.Date
+
+relationship 040878a9-35f9-9d9c-f807-0843940d13ca
+	fromColumn: Crime.Month
+	toColumn: Date.Date
+

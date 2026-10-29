@@ -1,0 +1,7 @@
+role Camden
+	modelPermission: read
+
+	tablePermission Crime = [Local Authority Name] == "Camden"
+
+	annotation PBI_Id = ec6aab1e63c8470d996b8536bf608f14
+

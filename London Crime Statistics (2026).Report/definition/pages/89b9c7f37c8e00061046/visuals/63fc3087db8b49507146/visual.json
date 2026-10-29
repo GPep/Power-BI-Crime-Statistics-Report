@@ -1,0 +1,107 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "63fc3087db8b49507146",
+  "position": {
+    "x": 926.09668806453453,
+    "y": 0,
+    "z": 2004,
+    "height": 658.50593648809865,
+    "width": 993.57609498380964,
+    "tabOrder": 5
+  },
+  "visual": {
+    "visualType": "funnel",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Crime"
+                    }
+                  },
+                  "Property": "Crime type"
+                }
+              },
+              "queryRef": "Crime.Crime type",
+              "nativeQueryRef": "Crime type",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Crime"
+                    }
+                  },
+                  "Property": "% Total Crime"
+                }
+              },
+              "queryRef": "Crime.% Total Crime",
+              "nativeQueryRef": "% Total Crime"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Crime"
+                  }
+                },
+                "Property": "% Total Crime"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "bafa74a17b29390dae30",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Crime"
+              }
+            },
+            "Property": "Crime type"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "99f588363003d7bdb6a7",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Crime"
+              }
+            },
+            "Property": "% Total Crime"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

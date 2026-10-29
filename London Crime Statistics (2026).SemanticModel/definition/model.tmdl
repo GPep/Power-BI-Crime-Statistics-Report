@@ -1,0 +1,37 @@
+model Model
+	culture: en-GB
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-GB
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+queryGroup 'Transform File from Extended Data'
+
+	annotation PBI_QueryGroupOrder = 0
+
+queryGroup 'Transform File from Extended Data\Helper Queries'
+
+	annotation PBI_QueryGroupOrder = 0
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["Crime","Sample File","Parameter1","Transform Sample File","Transform File","Population"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table Crime
+ref table DateTableTemplate_6b662b53-219b-46a8-97ca-f10090e21851
+ref table Population
+ref table Date
+ref table LocalDateTable_9892fabb-bf65-4330-934b-606051bebacd
+
+ref role Lambeth
+ref role Camden
+ref role Hackney
+ref role 'Tower Hamlets'
+ref role Westminster
+
+ref cultureInfo en-GB
+

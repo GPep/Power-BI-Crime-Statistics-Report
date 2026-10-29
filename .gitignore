@@ -1,0 +1,36 @@
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
+
+# Local Power BI preferences, caches, and recovery files
+**/.pbi/editorSettings.json
+**/.pbi/unappliedChanges.json
+**/.pbi/cache/
+**/.pbi/autoRecovery/
+**/.pbi/AutoRecovery/
+
+# Downloaded crime data and binary reports (keep the PBIP definitions)
+[Ee][Xx][Tt][Ee][Nn][Dd][Ee][Dd] [Dd][Aa][Tt][Aa]/
+*.[Pp][Bb][Ii][Xx]
+
+# Specifically excluded original files, regardless of filename case
+/[Pp][Oo][Ww][Ee][Rr] [Bb][Ii] [Bb][Oo][Oo][Tt][Cc][Aa][Mm][Pp] - [Cc][Rr][Ii][Mm][Ee] - [Oo][Ff][Ff][Ll][Ii][Nn][Ee]
+/[Pp][Oo][Ww][Ee][Rr] [Bb][Ii] [Bb][Oo][Oo][Tt][Cc][Aa][Mm][Pp] - [Cc][Rr][Ii][Mm][Ee] - [Oo][Ff][Ff][Ll][Ii][Nn][Ee].*
+/[Gg][Ll][Aa]
+/[Gg][Ll][Aa].*
+
+# Office lock files and temporary files
+~$*
+.~lock.*#
+*.tmp
+
+# Local credentials and tool caches
+.env
+.env.*
+!.env.example
+.credentials/
+credentials.json
+.vs/
+.vscode/
+__pycache__/
+.DS_Store
+Thumbs.db

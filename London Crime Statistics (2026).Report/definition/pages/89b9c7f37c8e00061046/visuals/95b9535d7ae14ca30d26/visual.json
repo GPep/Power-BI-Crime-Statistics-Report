@@ -1,0 +1,107 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "95b9535d7ae14ca30d26",
+  "position": {
+    "x": 926.09668806453453,
+    "y": 658.50593648809865,
+    "z": 2005,
+    "height": 421.16457422030339,
+    "width": 993.57609498380964,
+    "tabOrder": 6
+  },
+  "visual": {
+    "visualType": "stackedAreaChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Date"
+                    }
+                  },
+                  "Property": "Month & Year"
+                }
+              },
+              "queryRef": "Date.Month & Year",
+              "nativeQueryRef": "Month & Year",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Crime"
+                    }
+                  },
+                  "Property": "Crime Rate (Per 1000)"
+                }
+              },
+              "queryRef": "Crime.Crime Rate (Per 1000)",
+              "nativeQueryRef": "Crime Rate (Per 1000)"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Date"
+                  }
+                },
+                "Property": "Month & Year"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "09412bdb22371b004065",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Crime"
+              }
+            },
+            "Property": "Crime Rate (Per 1000)"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "ef772b5a1d952437cad6",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Date"
+              }
+            },
+            "Property": "Month & Year"
+          }
+        },
+        "type": "Categorical"
+      }
+    ]
+  }
+}

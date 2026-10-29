@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "London Crime Statistics (2026)"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "ba3441b9-e8a0-4553-aa39-83f2919ca8bf"
+  }
+}

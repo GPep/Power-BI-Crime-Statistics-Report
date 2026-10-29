@@ -1,0 +1,7 @@
+role Westminster
+	modelPermission: read
+
+	tablePermission Crime = [Local Authority Name] == "Westminster"
+
+	annotation PBI_Id = 0f8da3b219844352bd131b4f7630aa9f
+

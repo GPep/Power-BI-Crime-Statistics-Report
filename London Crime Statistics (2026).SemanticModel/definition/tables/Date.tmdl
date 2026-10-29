@@ -1,0 +1,103 @@
+table Date
+	lineageTag: 150b84f7-b1d8-40f5-931f-838dd325ce35
+
+	column Date
+		formatString: Long Date
+		lineageTag: cde397c4-022e-4fc9-892a-5d7ec56a2bf1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		variation Variation
+			isDefault
+			relationship: b46f654b-b28a-4d49-a88b-b77386c517cc
+			defaultHierarchy: LocalDateTable_9892fabb-bf65-4330-934b-606051bebacd.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation __PBI_SemanticLinks = [{"LinkTarget":{"TableName":"Date","TableItemName":"Month & Year","ObjectType":4},"LinkType":"UsedInGroup"}]
+
+	column YEAR = YEAR('Date'[Date])
+		formatString: 0
+		lineageTag: 7a037fa7-65e4-470a-bd81-3140b5ee49e7
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month = FORMAT('Date'[Date], "MMMM")
+		lineageTag: bc24fec3-04b6-4f64-b7d2-fa8013ba2e42
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Number' = Month('Date'[Date])
+		formatString: 0
+		lineageTag: 91001968-f64b-4a63-9fa8-634f251ae420
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Weekday Number' = DAY('Date'[Date])
+		formatString: 0
+		lineageTag: 902375a8-a48a-4558-89b2-fe1be6820f34
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column Day = FORMAT('Date'[Date], "DDDD")
+		lineageTag: 640cfcc4-e838-4e4e-afd3-af8e25012f80
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month & Year' =
+			IF(
+				ISBLANK('Date'[Date]),
+				BLANK(),
+				DATE(
+					YEAR('Date'[Date]),
+					1 + (MONTH('Date'[Date]) - 1),
+					1
+				)
+			)
+		formatString: mmmm yyyy
+		lineageTag: 6d91675b-aa38-48b8-87d8-cd6114c9236d
+		summarizeBy: none
+
+		extendedProperty GroupingMetadata =
+				{
+				  "version": 0,
+				  "groupedColumns": [
+				    {
+				      "Column": {
+				        "Expression": {
+				          "SourceRef": {
+				            "Entity": "Date"
+				          }
+				        },
+				        "Property": "Date"
+				      }
+				    }
+				  ],
+				  "binningMetadata": {
+				    "binSize": {
+				      "value": 1.0,
+				      "unit": 6
+				    }
+				  }
+				}
+
+		annotation GroupingDesignState = {"Version":0,"Sources":[{"Name":"d","Entity":"Date"}],"GroupedColumns":[{"Column":{"Expression":{"SourceRef":{"Source":"d"}},"Property":"Date"}}],"BinItem":{"Expression":{"Floor":{"Expression":{"Column":{"Expression":{"SourceRef":{"Source":"d"}},"Property":"Date"}},"Size":1.0,"TimeUnit":2}}}}
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	partition Date = calculated
+		mode: import
+		source = CALENDAR(MIN(Crime[Month]),MAX(Crime[Month]))
+
+	annotation PBI_Id = e2807c8fae40432db466d0e1114e5dc6
+

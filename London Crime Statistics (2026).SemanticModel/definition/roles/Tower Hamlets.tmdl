@@ -1,0 +1,7 @@
+role 'Tower Hamlets'
+	modelPermission: read
+
+	tablePermission Crime = [Local Authority Name] == "Tower Hamlets"
+
+	annotation PBI_Id = 1d5b25201e4d422b96bf58653c7fd226
+

@@ -1,0 +1,58 @@
+table Population
+	lineageTag: f3b83632-23b6-46e7-ad9c-efc77d9181e8
+
+	measure 'Total Population' = SUM(Population[Population])
+		formatString: 0
+		lineageTag: 004cdd5d-7b5d-47e3-b6b9-0a18f5e84545
+
+	measure 'Total Population (Unfiltered)' = CALCULATE(SUM(Population[Population]), ALL(Population[Local Authority Name]), ALL('Date'))
+		formatString: 0
+		lineageTag: 9a419dbe-ab8a-4179-912f-987c2fc63d8d
+
+	measure '% of Total Population' = DIVIDE(Population[Total Population],Population[Total Population (Unfiltered)])
+		lineageTag: dd6d8b29-580c-4671-883c-6e9c56826113
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Local Authority Name'
+		dataType: string
+		lineageTag: 9013f801-5aee-44de-932d-9e7950af5c2c
+		summarizeBy: none
+		sourceColumn: Local Authority Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'LSOA Code'
+		dataType: string
+		lineageTag: 2d089a3f-fdc0-4092-a5b4-36d116d2d0b0
+		summarizeBy: none
+		sourceColumn: LSOA Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column Population
+		dataType: int64
+		formatString: 0
+		lineageTag: e0e97a9b-4846-48ac-8a22-ebb54d40e3e9
+		summarizeBy: none
+		sourceColumn: Population
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Population = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\glpepper\OneDrive - Microsoft\Power BI Boot Camp\Crime Statistics\Population\Local Authorities.xlsx"), null, true),
+				    Sheet1_Sheet = Source{[Item="Sheet1",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Sheet1_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"LocalAuthorityCode", type text}, {"OfficialName", type text}, {"LocalAuthorityName", type text}, {"gss-code", type text}, {"Population", Int64.Type}}),
+				    #"Removed Other Columns" = Table.SelectColumns(#"Changed Type",{"LocalAuthorityName", "gss-code", "Population"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Removed Other Columns",{{"gss-code", "LSOA Code"}, {"LocalAuthorityName", "Local Authority Name"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
